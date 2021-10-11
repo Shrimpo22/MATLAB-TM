@@ -1,3 +1,4 @@
+clc
 close all
 T=readtable('covid192020PT.xlsx');
 
@@ -6,17 +7,22 @@ nDias=280;
 X=(1:nDias)';
 Y=T{X,2};
 Z=ones(length(X),1);
+
+
+% grauOP <--- variável onde irá estar guardado o grau do melhor polinómio
+% que aproxima a evolução ao longo dos dias.
+%
+% erroOP <--- variável onde irá estar guardado o erro associado ao melhor
+% polinómio (Inicializa-se com um valor grande para garantir que vai haver
+% pelo menos um polinómio com erro associado menor que esse valor)
+
 grauOP=1;
-erroOP=10000000000000000000000000000;
-plot(X,Y,'color', 'r');
-hold on
-pause(0.5)
+erroOP=100000000000000000000000000000000
+
+
+
 close all
 for k = 1:30
-    %     disp('grauOP');
-    %     disp(grauOP);
-    %     disp('erroOP');
-    %     disp(erroOP);
     Z=ones(length(X),1);
     close all
     for j=1:k
@@ -24,54 +30,33 @@ for k = 1:30
     end
     
     beta = inv(Z'*Z)*Z'*Y;
-    x = (X(1):.1:X(end))'; %<--------- Se der granel é daqui boi
+    x = (X(1):.1:X(end))';
     
     y = beta(1);
     
     for i=1:k
         y = y + beta(i+1)*x.^i;
     end
-    
+ 
     erroTotal=0;
     for i = 1:length(Y)
-        %         disp('length(Y)')
-        %         disp(length(Y))
-        %
-        yi=T{i,2};
-        %         disp('yi')
-        %         disp(yi)
-        
-        erroPrevisao=(yi-y(i))^2;
-        %         disp('erroP')
-        %         disp(erroPrevisao)
+        %disp(num2str(y(i)));
+        yr=T{i,2};
+        index=find(x==i);
+        erroPrevisao=(yr-y(index)).^2;
         erroTotal=erroTotal+erroPrevisao;
-        %         disp('erroT')
-        %         disp(erroTotal)
-        erroPs=sqrt(erroPrevisao);
-        %         disp('erroPs')
-        % %         disp(erroPs)
-        %         disp('--------------------------------------')
         
     end
-    %erroTotal=abs(erroTotal);
-    %     disp('erroT')
-    %     disp(erroTotal)
-    %     disp('--------------------------------------')
+  
+    disp(strcat('erroTotal:',num2str(erroTotal)));
+
     if erroTotal < erroOP
         erroOP=erroTotal;
         grauOP=k;
     end
-    %     disp('GrauOP=');
-    %     disp(grauOP);
-    figure(1)
-    plot(X,Y,'color', 'r');
-    hold on
-    %plot(x,y,'b');
-    %pause(5)
 end
-
-% disp('grauOP=');
-% disp(grauOP);
-%
-% disp('erroOP=');
-% disp(erroOP);
+plot(X,Y,'color', 'r');
+hold on
+plot(x,y,'b');
+disp(strcat('Grau Ótimo:', num2str(grauOP)));
+disp(strcat('Erro associado:', num2str(erroOP)));

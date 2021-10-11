@@ -9,7 +9,7 @@ X=(1:nDias)';
 Y=T{X,2};
 Z=[ones(length(X),1),X,X.^2,X.^3,X.^4,X.^5];
 
-beta=inv(Z'*Z)*Z'*Y
+beta=inv(Z'*Z)*Z'*Y;
 
 x=(X(1):.1:X(end))';
 z=[ones(length(x),1),x,x.^2,x.^3,x.^4,x.^5];
@@ -41,5 +41,5 @@ close all;
 plot(32,yi,'O');
 hold on
 plot(32, yr,'O');
-text(32, yr, '\leftarrow valor real 32º dia'), 'HorizontalAlignment';
+text(32, yr, '\leftarrow Valor real 32º dia');
 text(32,yi, '\leftarrow Previsão 32º dia');
