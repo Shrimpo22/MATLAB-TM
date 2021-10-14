@@ -47,16 +47,17 @@ for k = 1:30
         erroTotal=erroTotal+erroPrevisao;
         
     end
-  
-    disp(strcat('erroTotal:',num2str(erroTotal)));
 
     if erroTotal < erroOP
         erroOP=erroTotal;
         grauOP=k;
     end
 end
+
+NumP=grauOP+1;
 plot(X,Y,'color', 'r');
 hold on
 plot(x,y,'b');
 disp(strcat('Grau Ótimo:', num2str(grauOP)));
+disp(strcat('Número de Parâmetros Ótimos:', num2str(NumP)))
 disp(strcat('Erro associado:', num2str(erroOP)));
